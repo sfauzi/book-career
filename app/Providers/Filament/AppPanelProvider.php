@@ -55,6 +55,10 @@ class AppPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
+            ->renderHook(
+                'panels::auth.login.form.after',
+                fn() => view('filament.auth.socialite.google')
+            )
             ->authMiddleware([
                 Authenticate::class,
             ]);
