@@ -193,12 +193,12 @@ class TaskResource extends Resource
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
 
-                Tables\Actions\Action::make('view_history')
-                    ->label('Lihat History')
-                    ->icon('heroicon-o-clock')
-                    ->color('info')
-                    ->url(fn(Task $record): string => route('filament.app.resources.tasks.history', $record))
-                    ->openUrlInNewTab(false),
+                // Tables\Actions\Action::make('view_history')
+                //     ->label('Lihat History')
+                //     ->icon('heroicon-o-clock')
+                //     ->color('info')
+                //     ->url(fn(Task $record): string => route('filament.app.resources.tasks.history', $record))
+                //     ->openUrlInNewTab(false),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

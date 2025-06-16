@@ -27,10 +27,12 @@ class AppPanelProvider extends PanelProvider
             ->id('app')
             ->path('app')
             ->registration()
+            ->spa()
             ->topNavigation()
             ->login()
+            ->brandLogo(fn() => view('filament.app.logo'))
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Pink,
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')

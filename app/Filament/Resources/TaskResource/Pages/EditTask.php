@@ -13,14 +13,13 @@ class EditTask extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
             Actions\ViewAction::make(),
             Actions\DeleteAction::make(),
-            Actions\Action::make('view_history')
-                ->label('Lihat History')
-                ->icon('heroicon-o-clock')
-                ->color('info')
-                ->url(fn(): string => TaskResource::getUrl('history', ['record' => $this->record])),
+            // Actions\Action::make('view_history')
+            //     ->label('Lihat History')
+            //     ->icon('heroicon-o-clock')
+            //     ->color('info')
+            //     ->url(fn(): string => TaskResource::getUrl('history', ['record' => $this->record])),
         ];
     }
 
