@@ -24,13 +24,15 @@ class AppPanelProvider extends PanelProvider
     {
         return $panel
             ->default()
-            ->id('app')
-            ->path('app')
+            ->id('dashboard')
+            ->path('dashboard')
             ->registration()
             ->spa()
             ->topNavigation()
             ->login()
-            ->brandLogo(fn() => view('filament.app.logo'))
+            ->favicon(asset('images/logo.svg'))
+            ->brandLogo(asset('images/logo.svg'))
+            // ->brandLogo(fn() => view('filament.app.logo'))
             ->colors([
                 'primary' => Color::Pink,
             ])

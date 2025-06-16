@@ -154,7 +154,7 @@
                 <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12 slide-up">
                     <button
                         class="group px-8 py-4 bg-gradient-to-r from-primary to-secondary text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
-                        <a href="{{ route('filament.app.auth.login') }}">
+                        <a href="{{ route('filament.dashboard.auth.login') }}">
                             <span class="flex items-center">
                                 Mulai Sekarang
                                 <svg class="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none"
