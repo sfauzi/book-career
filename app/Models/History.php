@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Builder;
 
 class History extends Model
 {
@@ -23,6 +24,23 @@ class History extends Model
         'changed_fields' => 'array',
         'created_at' => 'datetime',
     ];
+
+    protected static function booted()
+    {
+        // Auto-assign user_id saat create
+        static::creating(function ($history) {
+            if (!$history->user_id && auth()->check()) {
+                $history->user_id = auth()->id();
+            }
+        });
+
+        // Global scope untuk membatasi data berdasarkan user
+        static::addGlobalScope('userScope', function (Builder $builder) {
+            if (auth()->check()) {
+                $builder->where('user_id', auth()->id());
+            }
+        });
+    }
 
     public function task(): BelongsTo
     {

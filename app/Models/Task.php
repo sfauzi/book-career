@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Builder;
 
 
 class Task extends Model
@@ -29,10 +30,25 @@ class Task extends Model
     ];
 
     // Event listeners untuk tracking changes
+    // Event listeners untuk tracking changes
     protected static function booted()
     {
+        // Auto-assign user_id saat create
+        static::creating(function ($task) {
+            if (!$task->user_id && auth()->check()) {
+                $task->user_id = auth()->id();
+            }
+        });
+
         static::updated(function ($task) {
             $task->recordHistory();
+        });
+
+        // Global scope untuk membatasi data berdasarkan user
+        static::addGlobalScope('userScope', function (Builder $builder) {
+            if (auth()->check()) {
+                $builder->where('user_id', auth()->id());
+            }
         });
     }
 
