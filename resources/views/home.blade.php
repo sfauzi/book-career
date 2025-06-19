@@ -3,10 +3,17 @@
 
     <head>
         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Welcome to BukuKarir</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        {!! SEOMeta::generate() !!}
+        <meta name="author" content="SpeechlessMind - SPM" />
+        {!! OpenGraph::generate() !!}
+        <meta property="og:site_name" content="SpeechlessMind - SPM">
+        <meta name="publisher" content="SPM - SpeechlessMind">
+        <meta name="robots" content="index, follow">
+        {!! JsonLd::generate() !!}
         <link rel="icon" type="image/x-icon" href="{{ url('images/logo.svg') }}" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&amp;display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&amp;display=swap" rel="stylesheet" />
         <script src="https://cdn.tailwindcss.com"></script>
 
         <style>
@@ -270,50 +277,6 @@
             </div>
         </div>
 
-        <script>
-            // Theme Toggle Functionality
-            const themeToggle = document.getElementById('themeToggle');
-            const html = document.documentElement;
-
-            // Check for saved theme preference or default to light mode
-            const currentTheme = localStorage.getItem('theme') || 'light';
-            html.classList.toggle('dark', currentTheme === 'dark');
-
-            themeToggle.addEventListener('click', () => {
-                const isDark = html.classList.toggle('dark');
-                localStorage.setItem('theme', isDark ? 'dark' : 'light');
-            });
-
-            // Smooth scroll and animation triggers
-            window.addEventListener('scroll', () => {
-                const elements = document.querySelectorAll('.slide-up');
-                elements.forEach(el => {
-                    const elementTop = el.getBoundingClientRect().top;
-                    const elementVisible = 150;
-
-                    if (elementTop < window.innerHeight - elementVisible) {
-                        el.style.opacity = '1';
-                        el.style.transform = 'translateY(0)';
-                    }
-                });
-            });
-
-            // Initialize animations
-            document.addEventListener('DOMContentLoaded', () => {
-                // Add subtle parallax effect to floating elements
-                const floatingElements = document.querySelectorAll('.floating, .floating-delayed');
-
-                document.addEventListener('mousemove', (e) => {
-                    const mouseX = e.clientX / window.innerWidth;
-                    const mouseY = e.clientY / window.innerHeight;
-
-                    floatingElements.forEach((el, index) => {
-                        const speed = (index % 2 === 0 ? 1 : -1) * 0.5;
-                        el.style.transform = `translate(${mouseX * speed}px, ${mouseY * speed}px)`;
-                    });
-                });
-            });
-        </script>
     </body>
 
 </html>
