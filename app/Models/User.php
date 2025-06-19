@@ -54,4 +54,9 @@ class User extends Authenticatable implements FilamentUser
     {
         return true;
     }
+
+    public function socialite()
+    {
+        return $this->hasMany(Socialite::class);
+    }
 }

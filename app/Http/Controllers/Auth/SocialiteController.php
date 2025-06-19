@@ -27,7 +27,7 @@ class SocialiteController extends Controller
 
         Auth::login($authuser);
 
-        return redirect('/');
+        return redirect()->route('filament.apps.pages.dashboard');
     }
 
     public function store($socialUser, $provider)
@@ -42,36 +42,14 @@ class SocialiteController extends Controller
             // Check if a user with the same email exists
             $user = User::where('email', $socialUser->getEmail())->first();
 
-            // If the user doesn't exist, create a new one
-            if (!$user) {
-                // Generate a base username from Google name or nickname
-                $baseUsername = $socialUser->getName() ?: $socialUser->getNickname();
-                $baseUsername = Str::slug($baseUsername);
+            // Create the new user with generated username and possibly phone
+            $user = User::create([
+                'id' => (string) Str::uuid(),
+                'name' => $socialUser->getName() ?: $socialUser->getNickname(),
+                'email' => $socialUser->getEmail(),
+                'password' => bcrypt(Str::random(24)),
+            ]);
 
-                // Check if username already exists and append a unique number if it does
-                $username = $baseUsername;
-                $counter = 1;
-                while (User::where('username', $username)->exists()) {
-                    $username = $baseUsername . $counter;
-                    $counter++;
-                }
-
-                // Retrieve phone number from raw Google data if available
-                $phone = $socialUser->user['phoneNumber'] ?? null; // Adjust key if different
-
-                // Create the new user with generated username and possibly phone
-                $user = User::create([
-                    'id' => (string) Str::uuid(),
-                    'name' => $socialUser->getName() ?: $socialUser->getNickname(),
-                    'email' => $socialUser->getEmail(),
-                    'username' => $username,
-                    'phone' => $phone,
-                    'password' => bcrypt(Str::random(24)),
-                ]);
-
-                // Assign the default role 'user' to the new user
-                $user->assignRole('user'); // Ensure 'user' role exists
-            }
 
             // Create the social account
             $socialAccount = $user->socialite()->create([
