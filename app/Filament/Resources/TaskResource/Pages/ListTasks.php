@@ -22,7 +22,8 @@ class ListTasks extends ListRecords
     public function getTabs(): array
     {
         return [
-            'all' => Tab::make(),
+            'all' => Tab::make()
+                ->modifyQueryUsing(fn($query) => $query->where('is_closed', '!=', true)),
 
             'Closed' => Tab::make()
                 ->modifyQueryUsing(fn(Builder $query) => $query->where('is_closed', true)),
