@@ -12,6 +12,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Infolists;
 use Filament\Infolists\Infolist;
+use Filament\Notifications\Notification;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -79,6 +80,12 @@ class TaskResource extends Resource
                             ->maxLength(255)
                             ->label('Platform')
                             ->placeholder('LinkedIn, JobStreet, dll.'),
+                        Forms\Components\Toggle::make('is_closed')
+                            ->label('Closed ?')
+                            ->onIcon('heroicon-m-eye')
+                            ->offIcon('heroicon-m-eye-slash')
+                            ->default(false)
+                            ->helperText('Determine if the tasks is closed'),
                     ])
                     ->columns(2),
 
@@ -97,11 +104,6 @@ class TaskResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user.name')
-                    ->label('User')
-                    ->sortable()
-                    ->searchable(),
-
                 Tables\Columns\TextColumn::make('company_name')
                     ->label('Perusahaan')
                     ->sortable()
@@ -138,6 +140,15 @@ class TaskResource extends Resource
                     ->counts('histories')
                     ->sortable()
                     ->toggleable(),
+                Tables\Columns\ToggleColumn::make('is_closed')
+                    ->label('Closed ?')
+                    ->afterStateUpdated(function ($record, $state) {
+                        Notification::make()
+                            ->title('Status Updated Successfully')
+                            ->body("The 'is_closed' status for the record has been changed.")
+                            ->success()
+                            ->send();
+                    }),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Dibuat')

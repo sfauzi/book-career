@@ -22,6 +22,7 @@ class Task extends Model
         'status',
         'platform',  // Menambahkan field platform
         'notes',   // Menambahkan field catatan
+        'is_closed',   // Menambahkan field catatan
     ];
 
 
