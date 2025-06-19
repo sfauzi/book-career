@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\Socialite as ModelSocialite;
-
+use Filament\Notifications\Notification;
 
 class SocialiteController extends Controller
 {
@@ -21,13 +21,31 @@ class SocialiteController extends Controller
     public function callback($provider)
     {
 
-        $socialUser = Socialite::driver($provider)->user();
+        try {
+            $socialUser = Socialite::driver($provider)->user();
+            $authuser = $this->store($socialUser, $provider);
+            Auth::login($authuser);
 
-        $authuser = $this->store($socialUser, $provider);
+            // Notification untuk login berhasil
+            Notification::make()
+                ->title('Login Berhasil!')
+                ->success()
+                ->body("Selamat datang, {$authuser->name}! Anda berhasil login dengan {$provider}.")
+                ->duration(5000)
+                ->send();
 
-        Auth::login($authuser);
+            return redirect()->route('filament.apps.pages.dashboard');
+        } catch (\Exception $e) {
+            // Notification untuk error
+            Notification::make()
+                ->title('Login Gagal')
+                ->danger()
+                ->body('Terjadi kesalahan saat login. Silakan coba lagi.')
+                ->duration(8000)
+                ->send();
 
-        return redirect()->route('filament.apps.pages.dashboard');
+            return redirect()->route('login')->with('error', 'Login gagal');
+        }
     }
 
     public function store($socialUser, $provider)
