@@ -115,18 +115,18 @@ class HistoryResource extends Resource
                     ])
                     ->label('Aksi'),
 
-                Tables\Filters\SelectFilter::make('user_id')
-                    ->relationship('user', 'name')
-                    ->label('User')
-                    ->searchable()
-                    ->preload(),
+                // Tables\Filters\SelectFilter::make('user_id')
+                //     ->relationship('user', 'name')
+                //     ->label('User')
+                //     ->searchable()
+                //     ->preload(),
 
-                Tables\Filters\SelectFilter::make('task_id')
-                    ->relationship('task', 'company_name')
-                    ->label('Task')
-                    ->searchable()
-                    ->preload()
-                    ->getOptionLabelFromRecordUsing(fn($record) => "{$record->company_name} - {$record->position}"),
+                // Tables\Filters\SelectFilter::make('task_id')
+                //     ->relationship('task', 'company_name')
+                //     ->label('Task')
+                //     ->searchable()
+                //     ->preload()
+                //     ->getOptionLabelFromRecordUsing(fn($record) => "{$record->company_name} - {$record->position}"),
 
                 Tables\Filters\Filter::make('created_at')
                     ->form([

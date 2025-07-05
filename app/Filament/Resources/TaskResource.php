@@ -179,11 +179,11 @@ class TaskResource extends Resource
                     ])
                     ->label('Status'),
 
-                Tables\Filters\SelectFilter::make('user_id')
-                    ->relationship('user', 'name')
-                    ->label('User')
-                    ->searchable()
-                    ->preload(),
+                // Tables\Filters\SelectFilter::make('user_id')
+                //     ->relationship('user', 'name')
+                //     ->label('User')
+                //     ->searchable()
+                //     ->preload(),
 
                 Tables\Filters\Filter::make('applied_date')
                     ->form([
