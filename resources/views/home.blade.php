@@ -228,7 +228,7 @@
                     </div>
                     <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Pantau Status</h3>
                     <p class="text-gray-600 dark:text-gray-300">
-                        Lacak setiap tahapan proses rekrutmen: mulai dari apply, interview, hingga hasil akhir — semua
+                        Lacak setiap tahapan proses rekrutmen: mulai dari apply, interview, hingga hasil akhir semua
                         tercatat rapi.
                     </p>
 
