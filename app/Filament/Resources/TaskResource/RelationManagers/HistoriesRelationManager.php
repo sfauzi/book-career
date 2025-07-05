@@ -72,10 +72,20 @@ class HistoriesRelationManager extends RelationManager
                                 $newValue = $newValue ? date('d/m/Y', strtotime($newValue)) : '<em>kosong</em>';
                             }
 
-                            $changes[] = "<strong>{$label}:</strong> {$oldValue} → {$newValue}";
+                            // Handle rich editor content dengan gambar
+                            if ($field === 'notes' || $this->isRichEditorField($field)) {
+                                $oldValue = $this->formatRichEditorContent($oldValue);
+                                $newValue = $this->formatRichEditorContent($newValue);
+                            }
+
+                            $changes[] = "<strong>{$label}:</strong><br>
+                                         <div style='margin-left: 10px;'>
+                                             <strong>Dari:</strong> {$oldValue}<br>
+                                             <strong>Ke:</strong> {$newValue}
+                                         </div>";
                         }
 
-                        return implode('<br>', $changes);
+                        return implode('<br><br>', $changes);
                     }),
 
                 Tables\Columns\TextColumn::make('changedBy.name')
@@ -140,15 +150,46 @@ class HistoriesRelationManager extends RelationManager
                             ->rows(6)
                             ->formatStateUsing(function (History $record): string {
                                 $details = [];
-
                                 foreach ($record->changed_fields as $field => $change) {
                                     $label = $change['field_label'] ?? ucfirst(str_replace('_', ' ', $field));
+
+                                    // Format old value
                                     $oldValue = $change['old_value'] ?? 'kosong';
+                                    if ($oldValue !== 'kosong' && (str_contains($oldValue, '<') || str_contains($oldValue, '>'))) {
+                                        $oldValue = strip_tags($oldValue);
+                                        $oldValue = preg_replace('/\s+/', ' ', trim($oldValue));
+                                    }
+
+                                    // Format new value
                                     $newValue = $change['new_value'] ?? 'kosong';
+                                    if ($newValue !== 'kosong' && (str_contains($newValue, '<') || str_contains($newValue, '>'))) {
+                                        // Convert HTML lists to readable format
+                                        $newValue = preg_replace_callback('/<ol>(.*?)<\/ol>/s', function ($matches) {
+                                            $content = $matches[1];
+                                            $items = [];
+                                            preg_match_all('/<li>(.*?)<\/li>/s', $content, $listMatches);
+                                            foreach ($listMatches[1] as $index => $item) {
+                                                $items[] = ($index + 1) . '. ' . strip_tags($item);
+                                            }
+                                            return implode('; ', $items);
+                                        }, $newValue);
+
+                                        $newValue = preg_replace_callback('/<ul>(.*?)<\/ul>/s', function ($matches) {
+                                            $content = $matches[1];
+                                            $items = [];
+                                            preg_match_all('/<li>(.*?)<\/li>/s', $content, $listMatches);
+                                            foreach ($listMatches[1] as $item) {
+                                                $items[] = '• ' . strip_tags($item);
+                                            }
+                                            return implode('; ', $items);
+                                        }, $newValue);
+
+                                        $newValue = strip_tags($newValue);
+                                        $newValue = preg_replace('/\s+/', ' ', trim($newValue));
+                                    }
 
                                     $details[] = "{$label}:\n  Dari: {$oldValue}\n  Ke: {$newValue}";
                                 }
-
                                 return implode("\n\n", $details);
                             }),
 
@@ -172,5 +213,59 @@ class HistoriesRelationManager extends RelationManager
             ->emptyStateHeading('Belum Ada Riwayat Perubahan')
             ->emptyStateDescription('Riwayat perubahan akan muncul ketika task ini dimodifikasi.')
             ->emptyStateIcon('heroicon-o-clock');
+    }
+
+    // Method helper untuk check rich editor field
+    private function isRichEditorField($field): bool
+    {
+        // Daftar field yang menggunakan rich editor
+        $richEditorFields = ['notes', 'description', 'content', 'body']; // sesuaikan dengan field Anda
+        return in_array($field, $richEditorFields);
+    }
+
+    // Method helper untuk format rich editor content
+    private function formatRichEditorContent($content): string
+    {
+        if (empty($content) || $content === '<em>kosong</em>') {
+            return '<em>kosong</em>';
+        }
+
+        // Jika bukan HTML, return as is
+        if (!str_contains($content, '<') && !str_contains($content, '>')) {
+            return $content;
+        }
+
+        // Process images - pastikan path absolut
+        $content = preg_replace_callback('/<img([^>]+)>/i', function ($matches) {
+            $imgTag = $matches[0];
+            $attributes = $matches[1];
+
+            // Extract src attribute
+            if (preg_match('/src=[\'"](.*?)[\'"]/', $attributes, $srcMatch)) {
+                $src = $srcMatch[1];
+
+                // Convert relative path to absolute URL jika diperlukan
+                if (!str_starts_with($src, 'http') && !str_starts_with($src, '/')) {
+                    $src = asset('storage/' . $src);
+                } elseif (str_starts_with($src, '/storage/')) {
+                    $src = asset($src);
+                }
+
+                // Rebuild img tag dengan styling untuk responsive
+                return '<img src="' . $src . '" style="max-width: 100%; height: auto; max-height: 200px; border-radius: 4px; margin: 5px 0;" alt="Image">';
+            }
+
+            return $imgTag;
+        }, $content);
+
+        // Process lists dengan styling yang lebih baik
+        $content = preg_replace('/<ol>/', '<ol style="margin: 10px 0; padding-left: 20px;">', $content);
+        $content = preg_replace('/<ul>/', '<ul style="margin: 10px 0; padding-left: 20px;">', $content);
+
+        // Process paragraphs
+        $content = preg_replace('/<p>/', '<p style="margin: 5px 0;">', $content);
+
+        // Wrap content in div untuk styling
+        return '<div style="max-width: 100%; word-wrap: break-word;">' . $content . '</div>';
     }
 }

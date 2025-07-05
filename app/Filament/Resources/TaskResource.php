@@ -7,6 +7,7 @@ use App\Filament\Resources\TaskResource\RelationManagers;
 use App\Models\Task;
 use Filament\Forms;
 use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -91,10 +92,15 @@ class TaskResource extends Resource
 
                 Forms\Components\Section::make('Catatan')
                     ->schema([
-                        Forms\Components\Textarea::make('notes')
-                            ->label('Catatan')
-                            ->rows(4)
-                            ->columnSpanFull(),
+                        RichEditor::make('notes')
+                            ->fileAttachmentsDisk('public')
+                            ->fileAttachmentsDirectory('uploads')
+                            ->fileAttachmentsVisibility('public')
+
+                        // Forms\Components\Textarea::make('notes')
+                        //     ->label('Catatan')
+                        //     ->rows(4)
+                        //     ->columnSpanFull(),
                     ])
                     ->collapsible(),
             ]);

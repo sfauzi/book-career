@@ -82,6 +82,12 @@ class Task extends Model
 
             $oldValue = $original[$field] ?? null;
 
+            // Skip if the field is 'is_closed' and value did not actually change
+            if ($field === 'is_closed' && (bool)$oldValue === (bool)$newValue) {
+                continue;
+            }
+
+
             $changedFields[$field] = [
                 'old_value' => $oldValue,
                 'new_value' => $newValue,
