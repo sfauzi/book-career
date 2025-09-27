@@ -67,6 +67,10 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
+                    ->copyable()
+                    ->badge()
+                    ->color('info')
+                    ->copyMessage('Email copied')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('role')
                     ->colors([
