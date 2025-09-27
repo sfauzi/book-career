@@ -28,7 +28,6 @@ class AppPanelProvider extends PanelProvider
             ->default()
             ->id('apps')
             ->path('apps')
-            ->registration()
             ->spa()
             ->topNavigation()
             ->login()
