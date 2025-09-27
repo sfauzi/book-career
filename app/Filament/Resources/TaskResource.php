@@ -30,6 +30,9 @@ class TaskResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Tasks';
 
+    protected static ?int $navigationGroupSort = 1;
+
+
     public static function form(Form $form): Form
     {
         return $form
