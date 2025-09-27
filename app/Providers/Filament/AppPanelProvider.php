@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Widgets\HistoryChart;
 use App\Filament\Widgets\RecentHistoryWidget;
 use App\Filament\Widgets\SimpleHistoryWidget;
 use App\Filament\Widgets\StatsOverview;
@@ -48,6 +49,7 @@ class AppPanelProvider extends PanelProvider
                 Widgets\AccountWidget::class,
                 // Widgets\FilamentInfoWidget::class,
                 StatsOverview::class,
+                HistoryChart::class,
                 RecentHistoryWidget::class,
                 SimpleHistoryWidget::class,
             ])
