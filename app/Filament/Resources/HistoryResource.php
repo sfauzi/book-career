@@ -30,7 +30,12 @@ class HistoryResource extends Resource
 
     protected static ?string $navigationGroup = 'Monitoring';
 
-    protected static ?int $navigationSort = 10;
+    protected static ?int $navigationGroupSort = 2;
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
 
     public static function form(Form $form): Form
     {
