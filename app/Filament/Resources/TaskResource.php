@@ -296,6 +296,11 @@ class TaskResource extends Resource
         ];
     }
 
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->can('viewAny', Task::class);
+    }
+
     public static function getPages(): array
     {
         return [
