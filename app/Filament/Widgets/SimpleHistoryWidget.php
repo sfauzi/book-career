@@ -11,9 +11,9 @@ class SimpleHistoryWidget extends Widget
 
     protected static ?string $heading = 'Riwayat Perubahan Terbaru';
 
-    protected static ?int $sort = 2;
+    protected static ?int $sort = 1;
 
-    protected int | string | array $columnSpan = 'full';
+    // protected int | string | array $columnSpan = 'full';
 
     protected static ?string $pollingInterval = '30s';
 

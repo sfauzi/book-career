@@ -10,6 +10,9 @@ class HistoryChart extends ChartWidget
 {
     protected static ?string $heading = 'User History Overview';
 
+    protected int | string | array $columnSpan = 'full';
+
+    protected bool $isCollapsible = true;
 
     protected function getData(): array
     {

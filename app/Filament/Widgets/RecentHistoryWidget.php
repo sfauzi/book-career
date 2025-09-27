@@ -14,8 +14,6 @@ class RecentHistoryWidget extends BaseWidget
 
     protected static ?int $sort = 2;
 
-    protected int | string | array $columnSpan = 'full';
-
     protected static ?string $maxHeight = '300px';
 
     public function table(Table $table): Table
