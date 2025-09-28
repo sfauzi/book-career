@@ -2,6 +2,7 @@
 
 namespace App\Filament\Widgets;
 
+use App\Models\History;
 use App\Models\Task;
 use App\Models\User;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
@@ -23,6 +24,11 @@ class StatsOverview extends BaseWidget
                     ->descriptionIcon('heroicon-m-check-circle')
                     ->color('success'),
 
+                Stat::make('History Make', History::count())
+                    ->description('Total history yang telah dilakukan')
+                    ->descriptionIcon('heroicon-m-archive-box-arrow-down')
+                    ->color('info'),
+
                 Stat::make('Admin Users', User::count())
                     ->description('Jumlah user terdaftar')
                     ->descriptionIcon('heroicon-m-user-group')
@@ -34,6 +40,11 @@ class StatsOverview extends BaseWidget
                     ->description('Total tasks dengan status applied')
                     ->descriptionIcon('heroicon-m-check-circle')
                     ->color('success'),
+
+                Stat::make('History Make', History::count())
+                    ->description('Total history yang telah dilakukan')
+                    ->descriptionIcon('heroicon-m-archive-box-arrow-down')
+                    ->color('info'),
             ];
         }
     }
