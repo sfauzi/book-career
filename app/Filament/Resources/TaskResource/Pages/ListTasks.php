@@ -28,6 +28,21 @@ class ListTasks extends ListRecords
             'Closed' => Tab::make()
                 ->modifyQueryUsing(fn(Builder $query) => $query->where('is_closed', true)),
 
+            'Applied' => Tab::make()
+                ->modifyQueryUsing(fn(Builder $query) => $query->where('status', 'Applied')),
+
+            'Interview' => Tab::make()
+                ->modifyQueryUsing(fn(Builder $query) => $query->where('status', 'Interview')),
+
+            'Test' => Tab::make()
+                ->modifyQueryUsing(fn(Builder $query) => $query->where('status', 'Test')),
+
+            'Diterima' => Tab::make()
+                ->modifyQueryUsing(fn(Builder $query) => $query->where('status', 'Diterima')),
+
+            'Ditolak' => Tab::make()
+                ->modifyQueryUsing(fn(Builder $query) => $query->where('status', 'Ditolak')),
+
         ];
     }
 }
